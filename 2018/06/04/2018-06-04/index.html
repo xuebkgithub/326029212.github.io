@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="技术,Nginx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="下载源码在nginx官网上选择稳定的版本Nginx。解压到&#x2F;data&#x2F;local&#x2F;目录。 笔者使用的是nginx-1.14.0。 准备工作 进入&#x2F;data&#x2F;local&#x2F;继续操作)  编译安装pcre库下载:ftp:&#x2F;&#x2F;ftp.csx.cam.ac.uk&#x2F;pub&#x2F;software&#x2F;programming&#x2F;pcre&#x2F; 安装：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Centos7.4下编译安装Nginx">
+<meta property="og:url" content="http://blog.xuebk.cn/2018/06/04/2018-06-04/index.html">
+<meta property="og:site_name" content="熊猫的技术小站">
+<meta property="og:description" content="下载源码在nginx官网上选择稳定的版本Nginx。解压到&#x2F;data&#x2F;local&#x2F;目录。 笔者使用的是nginx-1.14.0。 准备工作 进入&#x2F;data&#x2F;local&#x2F;继续操作)  编译安装pcre库下载:ftp:&#x2F;&#x2F;ftp.csx.cam.ac.uk&#x2F;pub&#x2F;software&#x2F;programming&#x2F;pcre&#x2F; 安装：">
+<meta property="og:image" content="http://7u2eqw.com1.z0.glb.clouddn.com/nginx-start-result.png">
+<meta property="og:image" content="http://7u2eqw.com1.z0.glb.clouddn.com/Nginx-welcome-page.png">
+<meta property="article:published_time" content="2018-06-04T04:00:00.000Z">
+<meta property="article:modified_time" content="2019-10-08T13:17:38.682Z">
+<meta property="article:author" content="熊猫">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://7u2eqw.com1.z0.glb.clouddn.com/nginx-start-result.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.xuebk.cn/2018/06/04/2018-06-04/"/>
+
+
+
+
+
+  <title>在Centos7.4下编译安装Nginx | 熊猫的技术小站</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">熊猫的技术小站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuebk.cn/2018/06/04/2018-06-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="熊猫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="熊猫的技术小站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">在Centos7.4下编译安装Nginx</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-04T12:00:00+08:00">
+                2018-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h2><p>在nginx官网上选择稳定的版本<a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">Nginx</a>。解压到<code>/data/local/</code>目录。</p>
+<p>笔者使用的是nginx-1.14.0。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><blockquote>
+<p>进入/data/local/继续操作)</p>
+</blockquote>
+<h3 id="编译安装pcre库"><a href="#编译安装pcre库" class="headerlink" title="编译安装pcre库"></a>编译安装pcre库</h3><p>下载:<a href="ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/" target="_blank" rel="noopener">ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/</a></p>
+<p>安装：</p>
+<a id="more"></a>
+
+<pre><code>.configure
+make &amp;&amp; make install</code></pre><p>高版本会出现<code>No rule to make target &#39;libpcre.la</code>错误，建议选择版本低一些，因为nginx暂不支持，可以使用8.42版本。</p>
+<p>编译错误：<code>&#39;aclocal-1.14&#39; is missing on your system.</code></p>
+<p>解决：输入命令<code>touch configure.ac aclocal.m4 configure Makefile.am Makefile.in</code>，然后重新编译。</p>
+<h3 id="安装zlib库"><a href="#安装zlib库" class="headerlink" title="安装zlib库"></a>安装zlib库</h3><p>下载:<a href="http://zlib.net" target="_blank" rel="noopener">http://zlib.net</a></p>
+<p>安装:</p>
+<pre><code>.configure
+make &amp;&amp; make install</code></pre><h3 id="安装ssl"><a href="#安装ssl" class="headerlink" title="安装ssl"></a>安装ssl</h3><p><a href="http://www.openssl.org/source/" target="_blank" rel="noopener">http://www.openssl.org/source/</a></p>
+<p>解压即可</p>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><h3 id="常用编译选项说明"><a href="#常用编译选项说明" class="headerlink" title="常用编译选项说明"></a>常用编译选项说明</h3><p><code>--prefix=PATH</code>： 指定nginx的安装目录。默认<code>/usr/local/nginx</code></p>
+<p><code>--conf-path=PATH</code> ： 设置nginx.conf配置文件的路径。nginx允许通过命令行中的<code>-c</code>选项使用不同的配置文件启动。默认为<code>prefix/conf/nginx.conf</code></p>
+<p><code>--with-pcre</code> ： 设置PCRE库的源码路径</p>
+<p><code>--with-zlib=PATH</code> ： 指定 zlib的安装目录。</p>
+<p><code>--with-http_ssl_module</code> ： 使用https协议模块。默认情况下，该模块没有被构建。前提是openssl与openssl-devel已安装</p>
+<p><code>--with-openssl</code> ：openssl解压目录</p>
+<p><code>--pid-path</code>：nginx运行时的进程ID保存目录</p>
+<h3 id="编译方案"><a href="#编译方案" class="headerlink" title="编译方案"></a>编译方案</h3><pre><code>./configure \
+  --prefix=/data/local/nginx-1.14.0 \
+--user=nginx --group=nginx \
+--with-http_ssl_module \
+--with-http_realip_module \
+--with-http_image_filter_module \
+--with-http_sub_module \
+--with-http_gzip_static_module \
+--with-http_stub_status_module \
+--with-pcre=/data/local/pcre-8.42 \
+--with-zlib=/data/local/zlib-1.2.11 \
+--with-openssl=/data/local/openssl-1.1.1-pre7 \
+--with-http_realip_module</code></pre><h3 id="编译安装-1"><a href="#编译安装-1" class="headerlink" title="编译安装"></a>编译安装</h3><pre><code>make &amp;&amp; make install</code></pre><h3 id="测试安装结果"><a href="#测试安装结果" class="headerlink" title="测试安装结果"></a>测试安装结果</h3><p>通过命令<code>/data/local/nginx/sbin/nginx</code>运行nginx</p>
+<p>在命令行下输入 <code>netstat -ptnl | grep &#39;nginx&#39;</code> 查看nginx是否启动成功</p>
+<p><img src="http://7u2eqw.com1.z0.glb.clouddn.com/nginx-start-result.png" alt="nginx启动结果"></p>
+<p>打开浏览器，输入localhost，如果看到下面的Welcome nginx页面说明安装成功了</p>
+<p><img src="http://7u2eqw.com1.z0.glb.clouddn.com/Nginx-welcome-page.png" alt="Welcome nginx页面"></p>
+<h3 id="添加启动脚本"><a href="#添加启动脚本" class="headerlink" title="添加启动脚本"></a>添加启动脚本</h3><p>安装完成后，如果需要在命令行下启动和停止nginx，或者添加开机启动任务，需要添加脚本到<code>/etc/init.d/</code>目录。</p>
+<p>脚本文件：</p>
+<pre><code>#! /bin/sh
+
+# Description: Startup script for nginx on CentOS、SuSE、redhat. cp it in /etc/init.d and
+# chkconfig --add nginx &amp;amp;amp;&amp;amp;amp; chkconfig nginx on
+# then you can use server command control nginx
+#
+# chkconfig: 2345 08 99
+# description: Starts, stops nginx
+
+set -e
+
+PATH=$PATH:/usr/local/nginx/sbin/
+DESC=&quot;nginx daemon&quot;
+NAME=nginx
+DAEMON=/usr/local/nginx/sbin/$NAME
+CONFIGFILE=/usr/local/nginx/conf/nginx.conf
+PIDFILE=/usr/local/nginx/logs/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Gracefully exit if the package has been removed.
+test -x $DAEMON || exit 0
+
+d_start() {
+    $DAEMON -c $CONFIGFILE || echo -n &quot; already running&quot;
+}
+
+d_stop() {
+    kill -QUIT `cat $PIDFILE` || echo -n &quot; not running&quot;
+}
+
+d_reload() {
+    kill -HUP `cat $PIDFILE` || echo -n &quot; can&apos;t reload&quot;
+}
+
+case &quot;$1&quot; in
+    start)
+        echo -n &quot;Starting $DESC: $NAME&quot;
+        d_start
+        echo &quot;.&quot;
+        ;;
+    stop)
+        echo -n &quot;Stopping $DESC: $NAME&quot;
+        d_stop
+        echo &quot;.&quot;
+        ;;
+    reload)
+        echo -n &quot;Reloading $DESC configuration...&quot;
+        d_reload
+        echo &quot;reloaded.&quot;
+        ;;
+    restart)
+        echo -n &quot;Restarting $DESC: $NAME&quot;
+        d_stop
+        sleep 1
+        d_start
+        echo &quot;.&quot;
+        ;;
+    *)
+    echo &quot;Usage: $SCRIPTNAME {start|stop|restart|force-reload}&quot; &gt;&amp;2
+    exit 3
+    ;;
+esac
+
+exit 0</code></pre><p>使用方法：</p>
+<pre><code>vim /etc/init.d/nginx
+chmod +x /etc/init.d/nginx
+chkconfig nginx on
+chkconfig --level 2345 nginx on</code></pre><p>启动方法：</p>
+<pre><code>service nginx xxx
+/etc/init.d/nginx xxx</code></pre><h1 id="简易编译方法"><a href="#简易编译方法" class="headerlink" title="简易编译方法"></a>简易编译方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">wget http:&#x2F;&#x2F;nginx.org&#x2F;download&#x2F;nginx-1.14.0.tar.gz</span><br><span class="line">wget https:&#x2F;&#x2F;ftp.pcre.org&#x2F;pub&#x2F;pcre&#x2F;pcre-8.42.tar.gz</span><br><span class="line">wget https:&#x2F;&#x2F;www.openssl.org&#x2F;source&#x2F;openssl-1.1.1-pre7.tar.gz</span><br><span class="line">wget http:&#x2F;&#x2F;zlib.net&#x2F;zlib-1.2.11.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxf nginx-1.14.0.tar.gz </span><br><span class="line">tar zxf pcre-8.42.tar.gz </span><br><span class="line">tar zxf zlib-1.2.11.tar.gz </span><br><span class="line">tar zxf openssl-1.1.1-pre7.tar.gz </span><br><span class="line"></span><br><span class="line">cd &#x2F;data&#x2F;local &amp;&amp; cd pcre-8.42</span><br><span class="line">.&#x2F;configure &amp;&amp; make &amp;&amp; make install</span><br><span class="line">cd &#x2F;data&#x2F;local &amp;&amp; cd zlib-1.2.11</span><br><span class="line">.&#x2F;configure &amp;&amp; make &amp;&amp; make install </span><br><span class="line">cd &#x2F;data&#x2F;local &amp;&amp; cd nginx-1.14.0</span><br><span class="line">.&#x2F;configure --prefix&#x3D;&#x2F;data&#x2F;local&#x2F;nginx-1.14.0 \</span><br><span class="line">--user&#x3D;nginx --group&#x3D;nginx \</span><br><span class="line">--with-http_ssl_module \</span><br><span class="line">--with-http_realip_module \</span><br><span class="line">--with-http_image_filter_module \</span><br><span class="line">--with-http_sub_module \</span><br><span class="line">--with-http_gzip_static_module \</span><br><span class="line">--with-http_stub_status_module \</span><br><span class="line">--with-stream&#x3D;dynamic \</span><br><span class="line">--with-stream_ssl_module \</span><br><span class="line">--with-pcre&#x3D;&#x2F;data&#x2F;local&#x2F;pcre-8.42 \</span><br><span class="line">--with-zlib&#x3D;&#x2F;data&#x2F;local&#x2F;zlib-1.2.11 \</span><br><span class="line">--with-openssl&#x3D;&#x2F;data&#x2F;local&#x2F;openssl-1.1.1-pre7 \</span><br><span class="line">--with-http_realip_module </span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<p>参考文章:<a href="http://www.coffin5257.com/opensuse-nginx-startup-script/" target="_blank" rel="noopener">openSUSE Nginx 启动脚本</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/23/Go-Ethereum%201.7.3%20%E6%90%AD%E5%BB%BA%E5%8F%8A%E7%BB%B4%E6%8A%A4/" rel="next" title="Go-Ethereum 1.7.3 搭建及维护">
+                <i class="fa fa-chevron-left"></i> Go-Ethereum 1.7.3 搭建及维护
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">熊猫</p>
+              <p class="site-description motion-element" itemprop="description">熊猫的技术小站</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载源码"><span class="nav-number">1.</span> <span class="nav-text">下载源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装pcre库"><span class="nav-number">2.1.</span> <span class="nav-text">编译安装pcre库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装zlib库"><span class="nav-number">2.2.</span> <span class="nav-text">安装zlib库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装ssl"><span class="nav-number">2.3.</span> <span class="nav-text">安装ssl</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">3.</span> <span class="nav-text">编译安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用编译选项说明"><span class="nav-number">3.1.</span> <span class="nav-text">常用编译选项说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译方案"><span class="nav-number">3.2.</span> <span class="nav-text">编译方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装-1"><span class="nav-number">3.3.</span> <span class="nav-text">编译安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试安装结果"><span class="nav-number">3.4.</span> <span class="nav-text">测试安装结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加启动脚本"><span class="nav-number">3.5.</span> <span class="nav-text">添加启动脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简易编译方法"><span class="nav-number"></span> <span class="nav-text">简易编译方法</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">熊猫</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom"><a href="http://www.beian.miit.gov.cn" target="_blank">京ICP备18056778号</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
